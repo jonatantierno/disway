@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Disway</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string-array name="stations_array">
+        <item>Pinar de Chamartín</item>
+        <item>Valdecarros</item>
+        <item>Las Rosas</item>
+        <item>Cuatro Caminos</item>
+        <item>Villaverde Alto</item>
+        <item>Moncloa</item>
+    </string-array>
+</resources>
