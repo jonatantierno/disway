@@ -1,7 +1,13 @@
 package com.agoravitae.agoravitae;
 
+import android.content.Intent;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +16,8 @@ import android.widget.TextView;
 
 public class CheckActivity extends ActionBarActivity {
     View checkLayout;
+
+    private byte[] OK_ID = new byte[]{-64, 118, -55, 41};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +39,43 @@ public class CheckActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 
-        if (getIntent().getBooleanExtra(RouteActivity.RESULT_OK_EXTRA,false)){
-            checkLayout.setBackground(getResources().getDrawable(R.drawable.background_check_ok));
+        Intent intent = getIntent();
+
+        byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
+
+        if (intent.getBooleanExtra(RouteActivity.RESULT_OK_EXTRA, false)){
+            setOk();
         }
+        if (idToString(id).equals(idToString(OK_ID))){
+            setOk();
+        }
+
+
+        Log.d("nfc", "ID: " + idToString(id));
+
+    }
+
+    private void setOk() {
+        checkLayout.setBackground(getResources().getDrawable(R.drawable.background_check_ok));
+    }
+
+    private String idToString(byte[] id) {
+        StringBuffer res = new StringBuffer();
+        for(int i=0; i<id.length;i++) {
+            res.append(new Integer(id[i]));
+            res.append(' ');
+        }
+        return res.toString();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
+
+        Log.d("nfc", "ID: " + new String(id));
+
     }
 
     @Override
