@@ -3,9 +3,11 @@ package com.agoravitae.agoravitae;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -18,19 +20,11 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final AutoCompleteTextView originEditText = (AutoCompleteTextView) findViewById(R.id.originEditText);
-        final AutoCompleteTextView destinationEditText = (AutoCompleteTextView) findViewById(R.id.destinationEditText);
-        String[] countries = getResources().getStringArray(R.array.stations_array);
+        initAutocomplete();
 
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this,  android.R.layout.simple_list_item_1, countries);
+        TextView recordTagTextView = (TextView) findViewById(R.id.recordTagTextView);
 
-        originEditText.setAdapter(adapter);
-        destinationEditText.setAdapter(adapter);
-
-        TextView menu = (TextView) findViewById(R.id.menuTextView);
-
-        menu.setOnClickListener(new View.OnClickListener() {
+        recordTagTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 startActivity(new Intent(MainActivity.this, RecordTagActivity.class));
@@ -41,9 +35,47 @@ public class MainActivity extends ActionBarActivity {
 
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, RouteActivity.class));
+                goToRouteActivity();
             }
         });
+
+    }
+
+    private void goToRouteActivity() {
+        startActivity(new Intent(MainActivity.this, RouteActivity.class));
+    }
+
+    private void initAutocomplete() {
+        final AutoCompleteTextView originEditText = (AutoCompleteTextView) findViewById(R.id.originEditText);
+        final AutoCompleteTextView destinationEditText = (AutoCompleteTextView) findViewById(R.id.destinationEditText);
+
+        TextView.OnEditorActionListener textViewListener = new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    destinationEditText.requestFocus();
+                    return true;
+                }
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    goToRouteActivity();
+                    return true;
+                }
+                return false;
+            }
+        };
+        originEditText.setOnEditorActionListener(textViewListener);
+        destinationEditText.setOnEditorActionListener(textViewListener);
+
+        String[] countries = getResources().getStringArray(R.array.stations_array);
+
+        final ArrayAdapter<String> adapter =
+            new ArrayAdapter<String>(MainActivity.this,  android.R.layout.simple_list_item_1, countries);
+
+        originEditText.setAdapter(adapter);
+        destinationEditText.setAdapter(adapter);
+
+        originEditText.setOnEditorActionListener(textViewListener);
+        destinationEditText.setOnEditorActionListener(textViewListener);
 
     }
 

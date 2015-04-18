@@ -1,73 +1,123 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:background="@drawable/background_recordtag"
+    tools:context=".MainActivity">
+    <!--android:background="@drawable/background_recordtag"-->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="30dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="B"
+        android:text=" "
         android:id="@+id/backTextView"
         android:layout_gravity="left" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Estación"
-        android:id="@+id/originTextView" />
-
-    <AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/stationEditText"
-            android:layout_width="match_parent"
-            android:layout_weight="100"
-            android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Línea"
-        android:id="@+id/lineTextView" />
-
-    <EditText xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/lineEditText"
-        android:inputType="numberDecimal"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_weight="100"
-        android:layout_height="wrap_content" />
+        android:paddingLeft="100dp"
+        android:paddingTop="120dp"
+        android:paddingRight="40dp"
+        android:id="@+id/recordTagLayout"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Sentido"
-        android:id="@+id/directionTextView" />
 
-    <AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/directionEditText"
-        android:layout_width="match_parent"
-        android:layout_weight="100"
-        android:layout_height="wrap_content" />
-
-    <Button
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:layout_marginBottom="50dp"
-            android:text="Ir"
-            android:id="@+id/backButton"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="right" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Estación"
+            android:id="@+id/originTextView" />
 
-</LinearLayout>
+        <AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/stationEditText"
+                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Línea"
+            android:id="@+id/lineTextView" />
+
+        <EditText xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/lineEditText"
+            android:inputType="numberDecimal"
+            android:imeOptions="actionNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Sentido"
+            android:id="@+id/directionTextView" />
+
+        <AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/directionEditText"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Detalles de etiqueta"
+            android:id="@+id/detailsTextView" />
+
+        <EditText xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/detailsEditText"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Ir"
+                android:id="@+id/touchButton"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="right" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="30dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Toca ahora la etiqueta con el teléfono"
+        android:id="@+id/readingTextView"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="50dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="  "
+        android:id="@+id/okTextView"
+        android:layout_gravity="bottom|left"
+        />
+
+
+</FrameLayout>
