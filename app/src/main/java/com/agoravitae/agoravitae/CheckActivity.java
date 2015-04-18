@@ -39,6 +39,14 @@ public class CheckActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 
+        if(getSharedPreferences(RecordTagActivity.RECORDING_STORAGE,0).getBoolean(RecordTagActivity.RECORDING, false)){
+            Intent intent = new Intent(this, RecordTagActivity.class);
+            intent.putExtra(RecordTagActivity.READING_EXTRA,true);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         Intent intent = getIntent();
 
         byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);

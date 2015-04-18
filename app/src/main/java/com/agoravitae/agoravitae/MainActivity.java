@@ -20,6 +20,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         initAutocomplete();
 
         TextView recordTagTextView = (TextView) findViewById(R.id.recordTagTextView);
@@ -39,6 +40,13 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        RecordTagActivity.disableRecording(this);
     }
 
     private void goToRouteActivity() {

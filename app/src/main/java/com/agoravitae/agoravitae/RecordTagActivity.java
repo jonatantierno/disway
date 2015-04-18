@@ -1,8 +1,10 @@
 package com.agoravitae.agoravitae;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcA;
@@ -26,11 +28,12 @@ import android.widget.TextView;
 
 public class RecordTagActivity extends ActionBarActivity {
 
-    private IntentFilter[] intentFiltersArray;
-    private String[][] techListsArray;
-    // private NfcAdapter nfcAdapter;
-    PendingIntent pendingIntent;
+    public static final String RECORDING = "RECORDING";
+    public static final String RECORDING_STORAGE = "RECORDING_STORAGE";
+    public static final String READING_EXTRA = "READING_EXTRA";
+
     TextView touchTextView;
+    View layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +41,7 @@ public class RecordTagActivity extends ActionBarActivity {
         setContentView(R.layout.activity_recordtag);
 
         touchTextView = (TextView) findViewById(R.id.readingTextView);
-
-        //prepareNfc();
+        layout = findViewById(R.id.recordTagLayout);
 
         initAutocomplete();
 
@@ -63,16 +65,24 @@ public class RecordTagActivity extends ActionBarActivity {
 
         readTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                touchTextView.setText("La etiqueta se ha guardado correctamente");
+                onTagRead();
             }
         });
 
     }
 
-    private void readTag() {
-        View layout = findViewById(R.id.recordTagLayout);
+    private void onTagRead() {
         layout.setVisibility(View.GONE);
         touchTextView.setVisibility(View.VISIBLE);
+        touchTextView.setText("La etiqueta se ha guardado correctamente");
+        disableRecording(this);
+    }
+
+    private void readTag() {
+        layout.setVisibility(View.GONE);
+        touchTextView.setVisibility(View.VISIBLE);
+        getSharedPreferences(RECORDING_STORAGE, 0).edit().putBoolean(RECORDING,true).commit();
+
     }
 
     private void initAutocomplete() {
@@ -115,92 +125,37 @@ public class RecordTagActivity extends ActionBarActivity {
         };
     }
 
-    private void prepareNfc() {
-        pendingIntent = PendingIntent.getActivity(
-                this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-
-        IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
-        try {
-            ndef.addDataType("*/*");    /* Handles all MIME based dispatches.
-                                       You should specify only the ones that you need. */
-        }
-        catch (IntentFilter.MalformedMimeTypeException e) {
-            throw new RuntimeException("fail", e);
-        }
-        intentFiltersArray = new IntentFilter[] {ndef, };
-        techListsArray = new String[][] { new String[] {
-                NfcF.class.getName(),
-                NfcA.class.getName(),
-                NfcB.class.getName(),
-                TagTechnology.class.getName(),} };
-    }
-
     @Override
-    public void onStart() {
-        super.onStart();
-       // nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
 
+        setIntent(intent);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-//        nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFiltersArray, techListsArray);
-
-        Intent intent = getIntent();
-
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
-            logNfcData(intent);
+        if (getIntent().getBooleanExtra(READING_EXTRA, false)){
+            onTagRead();
         }
-        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(getIntent().getAction())) {
-            logNfcData(intent);
-        }
-        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
-            logNfcData(intent);
-        }
-    }
-    public void onNewIntent(Intent intent) {
-        logNfcData(intent);
-    }
-    private void logNfcData(Intent intent) {
-        byte[] idByteArray = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
-        Log.d("nfc", "ID: " + new String(idByteArray));
 
-        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-
-        Log.d("nfc", "TAG__ID: " + tag.getId() + ", contents: " + tag.describeContents());
     }
 
     public void onPause() {
         super.onPause();
-   //     nfcAdapter.disableForegroundDispatch(this);
-    }
 
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void onBackPressed() {
+        super.onBackPressed();
+        disableRecording(this);
     }
 
-    public void onItemSelected(int position) {
+    public static void disableRecording(Activity activity) {
+        activity.getSharedPreferences(RECORDING_STORAGE, 0).edit().putBoolean(RECORDING,false).commit();
+
     }
 }
